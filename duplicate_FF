@@ -1,0 +1,173 @@
+#!/usr/bin/bash
+#set -x
+#  Author: Jim McDonald Sydney, Australia
+function Usage(){
+   cat << the_end
+
+ *** INVALID OPTION***
+
+ Usage: $(basename $0) -f 'filter' -d 'source directory' -o 'output directory'
+
+  -f Optional filter, filter file list by part of the file name. 
+     Notes: if filtered by 'rar' that will pick both the word 'library' and suffix '.rar'
+  -d Source directory, Requires at least one, many can be entered each must start with -d 
+  -o Optional output directory. If not set, the current directory of '$PWD' will used  
+     In the ouput diretory a unique subdirectory is created containg all output.
+  
+  Optional maximumfile size.  Default is 20 GiB
+  -k or -K kilobytes (KiB)
+  -m or -M megabytes (Mib)
+  -g or -G gigabytes (GiB)
+    
+ Notes 
+ 'filter' 'source directory' 'output directory' must have single or double quotes
+  This allows for spaces in the filter and directory names  
+  Only the first instances of -f and -o used, the rest ignored
+  Setting a limit on file size can save time with unnecessary check sum calculations 
+
+ More info : https://github.com/Jim-JMCD/Duplicate-File-Finder/blob/main/README.md
+the_end
+exit 1
+}
+#_____________________________________________________
+now=$(date +%y%m%d-%H%M)
+run_dir=""
+filter=""
+source_list_file=""
+tmp_list=duptmp_$now
+#_____________________________________________________
+trap cleanup EXIT
+cleanup () {
+   mkdir $out_dir 2>/dev/null
+   mv $all_files $out_dir       2>/dev/null
+   mv $unique_files $out_dir    2>/dev/null
+   mv $dup_files_1 $out_dir 2>/dev/null
+   mv $dup_files_2 $out_dir 2>/dev/null
+   mv $log $out_dir  2>/dev/null
+   rm $cksum_list    2>/dev/null
+   rm /tmp/$tmp_list 2>/dev/null	
+   rm $source_list   2>/dev/null	
+   rm $duplicate_tmp 2>/dev/null	
+}
+#_____________________________________________________
+function Is_int(){
+   if ! [[ $1 =~ ^[0-9]+$ ]] ; then
+      echo " SIZE requires a positive whole number"
+      exit 1 
+   fi
+}   
+#_____________________________________________________
+function cksum_it(){
+   [ -z "$1" ] && return
+   sha256sum "$1" | sed 's/*//g'
+} 
+export -f cksum_it
+#_____________________________________________________
+# Get ready get options and check validity
+opt_count=$#
+[ $opt_count -eq 0 ] && echo "FAILED. For more info run: $(basename $0) -h" && exit 1
+opt_pairs=0
+max_size=21474836480 # 20G in bytes
+while getopts ":f:d:o:K:k:M:m:G:g:" opt; do
+      opt_pairs=$(($opt_pairs + 1))
+      case $opt in
+        f) [ -z "$filter" ] && filter=${OPTARG} ;;
+        d) echo "$OPTARG" >> /tmp/$tmp_list ;;
+        o) [ -z "$run_dir" ] &&  run_dir=${OPTARG} ;;
+      k|K) Is_int $OPTARG && max_size=$(((1024 * "$OPTARG") + 1 )) ;;
+      m|M) Is_int $OPTARG && max_size=$(((1024 * 1024 * "$OPTARG") +1 )) ;;
+      g|G) Is_int $OPTARG && max_size=$(((1024 * 1024 * 1024 * "$OPTARG") + 1 )) ;;
+        :) echo -e "An option requires an argument." ; exit 1 ;; 
+        *) Usage ;; 
+      esac
+done
+shift "$(($OPTIND -1))"
+# Check for options that have no preceding -x 
+# getopt uses pairs of options
+[ $(($opt_count % 2)) == 1 ] && Usage
+[ $(($opt_count / 2)) != $opt_pairs ] && Usage 
+
+# Test if given any source directories
+[ ! -s /tmp/$tmp_list ] && Usage
+# if not given a run directory set it to the default ($PWD)
+[ -z "$run_dir" ] && run_dir=$PWD
+if [ ! -d "$run_dir" ]; then
+    echo "Output directory doesn't exist" ; exit 1 
+else    
+    mv /tmp/$tmp_list $run_dir 2>/dev/null
+    source_list=$run_dir/$tmp_list
+fi
+# Check all source direcotries are valid.
+while read dir ; do 
+   if [ ! -d "${dir}" ] ; then
+      echo "Source directory '${dir}' does not exist "
+      exit 1
+   elif [ -z "$(ls -A "${dir}")" ]; then
+      echo "Source directory '${dir}' is empty "
+      exit 1
+  fi
+done < $source_list
+# All input checks are complete
+#_____________________________________________________
+all_files=$run_dir/all_files_$now.csv
+unique_files=$run_dir/unique_files_$now.csv
+dup_files_1=$run_dir/duplicate_files1_$now.csv
+dup_files_2=$run_dir/duplicate_files2_$now.csv
+duplicate_tmp=$run_dir/duplicate_tmp_$now.csv
+cksum_list=$run_dir/temp_file_$now
+out_dir=$run_dir/duplicates_found_$now
+log=$run_dir/log_$now.txt
+echo === "START : $(date) =========" > $log
+# Make csv file of all filtered files: column1 = checksum , column2 = fully pathed file name
+while read source_dir ; do 
+   cd "${source_dir}"
+     find ~+ -size -${max_size}c -iname "*${filter}*" -type f 2>>$log | grep -v '$RECYCLE.BIN'| \
+	     awk '{ printf "\"%s\"\n",$0 }'# | xargs -n1 bash -c 'cksum_it "$1"' - |\
+             awk '{ printf "%s,",$1
+                    for(i=2;i<=NF;i++)
+                       if(i==2)
+                         printf "\"%s",$i
+                       else  
+                   printf " %s",$i
+                   printf "\"\n"}' >> $all_files
+done < $source_list
+if [ $(wc -l < "$all_files") -lt 2 ] ; then
+   echo "Insfficent files found (require a minmum of 2) - all filtered out or source empty"  >> $log
+   exit
+fi   
+# Just made a list of all files now do the same for 
+# Duplicate files & Unique files
+awk ' BEGIN { FS=","} { print $1 }' $all_files | sort -u > $cksum_list 
+while read file_cksum ; do
+  if [[ $(grep $file_cksum $all_files| wc -l) > 1 ]]  ; then
+     grep $file_cksum $all_files >> $duplicate_tmp
+  else
+     grep $file_cksum $all_files >> $unique_files 
+  fi	  
+done < $cksum_list	  
+
+if [ ! -f "$duplicate_tmp" ]; then
+    echo "No duplicate files found" > $dup_files_1
+    echo "No duplicate files found" > $dup_files_2
+    echo "No duplicate files found - End $(date)" >> $log 
+    exit 0
+fi
+## Make a spreadsheet friendly file listing all the duplicates files - one file per row 
+echo "SHA256,File,Directory,\"Size (KB)\"" > $dup_files_1
+while IFS=, read -r ck_sum file_name; do
+   fname=$(sed -e 's/^"//' -e 's/"$//' <<<"${file_name}")
+   file_size=$(du -b "$fname" 2>> $log | awk '{print $1}')
+   dir_name_size=$(dirname "${file_name}" | awk -v size=$file_size '{printf "%s\",%.1f\n",$0,size/1024}')
+   echo "${ck_sum},${file_name},${dir_name_size}" >> $dup_files_1
+done < $duplicate_tmp
+## Make a spreadsheet friendly file listing all the duplicates files - one checksum per row 
+awk ' BEGIN { FS=","} { print $1 }' $dup_files_1 |grep -v SHA256 | sort -u > $cksum_list 
+echo "SHA256,\"Size (KB)\",File,Directory,File,Directory,File,Directory,File,Director," > $dup_files_2
+while read -r ck_sum ; do
+   size=$(grep $ck_sum  $dup_files_1 | awk -F"," '{ print $4}'|sort -u)
+   files_dirs=$(grep $ck_sum $dup_files_1 | awk -F"," '{ printf ",%s,%s",$2,$3}')
+   echo "${ck_sum},${size}${files_dirs}" >> $dup_files_2
+done < $cksum_list
+
+echo "=== END   : $(date) ==========" >> $log
+
