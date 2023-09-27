@@ -42,9 +42,9 @@ Setting maximum file size is optional, default is 20 GiB.  Ignoring large files 
 NOTE: If MS Excel is the default application for CVS files and files names contain non-Latin alphabet characters excel will not display those characters correctly. Rename *.csv file to a *.txt and import manually.  
   
 __../duplicate_files1_yymmdd-hhmm.csv__  
-Format – one file per row
+Format – One file per row
 
-column 1 : sha256 Checksum
+column 1 : sha256 checksum
 
 column 2 : fully pathed file name
 
@@ -53,9 +53,9 @@ column 3 : full path of containing directory
 column 4 : file size in KiB
 
 __../duplicate_files2_yymmdd-hhmm.csv__  
-Format – For each sha256 value list size and all files
+Format – Every row is as unique sha256 value with file size and all files with that shar256 value.
 
-column 1 : sha256 Checksum
+column 1 : sha256 checksum
 
 column 2 : file size in KiB 
 
@@ -67,7 +67,7 @@ column 5 : fully pathed file name
 
 column 6 : full path of containing directory
 
-If more files match the checksum they are added as columns in <file><directory> pairs        
+If more files match the checksum they are added as columns in <file> <directory> pairs        
 
 __../all_files_yymmdd-hhmm.csv__     Format: check_sum,\"\<full path\>\/\<file name\>\"
 
