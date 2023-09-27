@@ -36,6 +36,7 @@ Setting maximum file size is optional, default is 20 GiB.  Ignoring large files 
 * Full file names can be used, but it only reports on exact contents using checksum.  
 * Only the first instances of -f and -o used, the rest ignored.
 * The script is designed to be thorough, not designed for speed.
+* Windows file systems occasionally produce some odd stuff that cannot be processed when mounted on Linux.
 
 ### OUTPUTS 
 NOTE: If MS Excel is the default application for CVS files and files names contain non-Latin alphabet characters excel will not display those characters correctly. Rename *.csv file to a *.txt and import manually.  
@@ -73,9 +74,7 @@ __../all_files_yymmdd-hhmm.csv__     Format: check_sum,\"\<full path\>\/\<file n
 __../unique_files_yymmdd-hhmm.csv__  Format: check_sum,\"\<full path\>\/\<file name\>\"
 
 __../log__yymmdd-hhmm.txt__ 	 Basic logging. 
-
-Windows file systems occasionally produce some odd stuff that cannot be processed when mounted on Linux.     
-
+   
 ### USING THE REPORT TO MOVE or REMOVE FILES
 Removing files can be tricky and best done with care, best to move files before removal.  A file may use its directory name to give it meaning or the directory name may irrelevant and the file name may be important.
  
