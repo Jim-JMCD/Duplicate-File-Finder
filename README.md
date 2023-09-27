@@ -34,7 +34,8 @@ Setting maximum file size is optional, default is 20 GiB.  Ignoring large files 
 ### Notes      
 * If filtered by 'rar' that will pick both the word 'LIBRARY' and suffix '.rar'
 * Full file names can be used, but it only reports on exact contents using checksum.  
-* Only the first instances of -f and -o used, the rest ignored
+* Only the first instances of -f and -o used, the rest ignored.
+* The script is designed to be thorough, not designed for speed.
 
 ### OUTPUTS 
 NOTE: If MS Excel is the default application for CVS files and files names contain non-Latin alphabet characters excel will not display those characters correctly. Rename *.csv file to a *.txt and import manually.  
