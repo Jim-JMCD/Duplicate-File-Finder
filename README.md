@@ -41,7 +41,7 @@ Setting maximum file size is optional, default is 20 GiB.  Ignoring large files 
 * Windows file systems occasionally produce some odd stuff that cannot be processed when mounted on Linux.
 
 ### OUTPUTS 
-NOTE: If MS Excel is the default application for CVS files and files names contain non-Latin alphabet characters excel will not display those characters correctly. Rename *.csv file to a *.txt and import manually.  
+NOTE: If MS Excel is the default application for CVS files and files names contain non-Latin alphabet characters excel will not display those characters correctly. Change the default app for CSV to Notepad/Wordpad and manually immport into excel or rename *.csv file to a *.txt and import manually.  
   
 __../duplicate_files1_yymmdd-hhmm.csv__  
 Format – One file per row
