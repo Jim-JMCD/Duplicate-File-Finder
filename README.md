@@ -5,7 +5,9 @@ Script created on MS Windows WSL-Ubuntu and also tested with MSYS2 and Gitbash s
 
 It requires a least one directory to search many directories can be compared.  Files names and maximum file sizes can be used as filters to narrow searches and save time. Reports are CSV format which camn be imported into a spreadsheet. 
 
-List(s) of file to move or delete can created from either duplicate file CSV files. The directories with name '$RECYCLE.BIN' are ignored. Linux sees some MS Windows directories as executable only, a user or app can go into them but can't read them. If the Windows directory is user accessible it be easily corrected by respondiong to "You don't currently have permission to access this folder".  If the directory is not user accessible then its probsbly a system directory that not worth checking for dulicate files.  
+List(s) of files to move or delete can be created from either of duplicate file CSV reports. 
+
+The directories with name '$RECYCLE.BIN' are ignored. Linux sees some MS Windows directories as executable only, a user or app can go into them but can't read them. If the Windows "executable only" directory is user accessible it be easily corrected by respondiong to "You don't currently have permission to access this folder".  If the directory is not user accessible then its probably a system directory that not worth checking for dulicate files.  
 __________________________________________________________________________________________
 Script created on MS Windows WSL-Ubuntu and also tested with MSYS2 and Gitbash shells.  It should work on Cygwin (MSYS2 and Gitbash are Cygwin derivates) and other Linux. 
 
