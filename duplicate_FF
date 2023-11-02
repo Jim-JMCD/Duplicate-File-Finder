@@ -1,6 +1,5 @@
 #!/usr/bin/bash
 #set -x
-#  Author: Jim McDonald Sydney, Australia
 function Usage(){
    cat << the_end
 
@@ -17,13 +16,23 @@ function Usage(){
   -m or -M megabytes (Mib)
   -g or -G gigabytes (GiB)
     
- Notes 
+Output
+  Details :  https://github.com/Jim-JMCD/Duplicate-File-Finder/blob/main/README.md.
+  A CSV file with each row listing all files and parent directory for each checksum
+  A CSV file with one file and parent directory per row.
+  A CSV file listing all files
+  A CSV file listing all unique files.
+  A log file
+  All files and parent directories are fullt pathed.
+
+Notes 
  'filter' 'source directory' 'output directory' must have single or double quotes
   This allows for spaces in the filter and directory names  
   Only the first instances of -f and -o used, the rest ignored
   Setting a limit on file size can save time with unnecessary checksum calculations 
 
- More info : https://github.com/Jim-JMCD/Duplicate-File-Finder/blob/main/README.md
+ More info  : https://github.com/Jim-JMCD/Duplicate-File-Finder/blob/main/README.md
+ Author: Jim McDonald , Sydney Aust.
 the_end
 exit 1
 }
