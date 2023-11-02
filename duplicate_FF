@@ -4,15 +4,13 @@
 function Usage(){
    cat << the_end
 
- *** INVALID OPTION***
-
  Usage: $(basename $0) -f 'filter' -d 'source directory' -o 'output directory'
 
   -f Optional filter, filter file list by part of the file name. 
      Notes: if filtered by 'rar' that will pick both the word 'library' and suffix '.rar'
   -d Source directory, Requires at least one, many can be entered each must start with -d 
   -o Optional output directory. If not set, the current directory of '$PWD' will used  
-     In the ouput diretory a unique subdirectory is created containg all output.
+     In the ouput diretory a unique timestamped subdirectory is created containg all output.
   
   Optional maximumfile size.  Default is 20 GiB
   -k or -K kilobytes (KiB)
@@ -23,7 +21,7 @@ function Usage(){
  'filter' 'source directory' 'output directory' must have single or double quotes
   This allows for spaces in the filter and directory names  
   Only the first instances of -f and -o used, the rest ignored
-  Setting a limit on file size can save time with unnecessary check sum calculations 
+  Setting a limit on file size can save time with unnecessary checksum calculations 
 
  More info : https://github.com/Jim-JMCD/Duplicate-File-Finder/blob/main/README.md
 the_end
