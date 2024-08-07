@@ -1,5 +1,5 @@
 ## Duplicate File Finder ( *duplicate_FF* )
-A bash script will search supplied directory(s) and compare files using sha256 checksum and produce reports on what it found.                  
+A bash script will search supplied directory(s) and compare files using sha256 checksum and produce reports on what it finds.                  
                                                                   
 Script created on MS Windows WSL-Ubuntu and also tested with MSYS2 and Gitbash shells.  It should work on Cygwin (MSYS2 and Gitbash are Cygwin derivates) and other Linux.                                                     
 
@@ -7,12 +7,12 @@ It requires a least one directory to search many directories can be compared.  F
 
 List(s) of files to move or delete can be created from either of duplicate file CSV reports. 
 
-The directories with name '$RECYCLE.BIN' are ignored. Linux sees some MS Windows directories as executable only, a user or app can go into them but can't read them. If the Windows "executable only" directory is user accessible it be easily corrected by respondiong to "You don't currently have permission to access this folder".  If the directory is not user accessible then its probably a system directory that not worth checking for dulicate files.  
+Directories with name '$RECYCLE.BIN' are ignored. Linux sees some MS Windows directories as executable only, a user or app can go into them but can't read them. If the Windows "executable only" directory is user accessible, it be easily corrected by respondiong to "You don't currently have permission to access this folder".  If the directory is not user accessible then its probably a system directory that not worth checking for dulicate files.  
 __________________________________________________________________________________________
 Script created on MS Windows WSL-Ubuntu and also tested with MSYS2 and Gitbash shells.  It should work on Cygwin (MSYS2 and Gitbash are Cygwin derivates) and other Linux. 
 
 __Usage__ 
-_duplicate_FF -f 'filter' -d 'source directory' -o 'output directory'_
+_duplicate_FF -f 'filter' -d 'source directory' 
 
 **_duplicate_FF -f '.mp4' -m 300 -d './video/' -d '/home/fred/down loads' -o /tmp_** Check all mp4 files that are smaller 300MB in Fred's home directory and the subdirectory ./video. Output will be placed in /tmp.   
 
@@ -23,8 +23,6 @@ Inputs of 'filter' 'source directory' 'output directory' should have single or d
 
 **-d** One or many directories can be entered each must start with -d.  
 
-**-o** Optional output directory. If not set, the current directory will used. In the output directory a unique subdirectory is created containing all output files
-  
 Setting maximum file size is optional, default is 20 GiB.  Ignoring large files can save time.
 
 **-k or -K** kilobytes (KiB)
@@ -33,15 +31,19 @@ Setting maximum file size is optional, default is 20 GiB.  Ignoring large files 
 
 **-g or -G** gigabytes (GiB)
     
-### Notes      
+### Notes
+* Output directory is created in the directory from which the script is run.
+* Temporary files are created in the directory from which the script is run - all removed or moved on scipt termination
+* 'filter' and 'source directory' require single or double quotes for spaces in the filter and directory input.
 * If filtered by 'rar' that will pick both the word 'LIBRARY' and suffix '.rar'
-* Full file names can be used, but it only reports on exact contents using checksum.  
-* Only the first instances of -f and -o used, the rest ignored.
+* Full file names can be used, but it only reports on contents using checksum.  
+* Only the first instances of -f used, the rest ignored.
 * The script is designed to be thorough, not designed for speed.
 * Windows file systems occasionally produce some odd stuff that cannot be processed when mounted on Linux.
 
 ### OUTPUTS 
-NOTE: If MS Excel is the default application for CVS files and files names contain non-Latin alphabet characters excel will not display those characters correctly. Change the default app for CSV to Notepad/Wordpad and manually immport into excel or rename *.csv file to a *.txt and import manually.  
+
+NOTE: If MS Excel is the default application for CVS files and files names containing non-Latin alphabet characters excel will not display those characters correctly. Change the default app for CSV to Notepad/Wordpad and manually import into excel or rename *.csv file to a *.txt and import manually.  
   
 __../duplicate_files1_yymmdd-hhmm.csv__  
 Format – One file per row
