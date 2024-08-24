@@ -13,7 +13,7 @@ ________________________________________________________________________________
 __Usage__ 
 duplicate_FF -f 'filter' -d 'source directory' 
 
-**_duplicate_FF -f '.mp4' -m 300 -d './video/' -d '/home/fred/down loads' -o /tmp_** Check all mp4 files that are smaller 300MB in Fred's down loads directory and ./video. Output will be placed in /tmp.   
+**_duplicate_FF -f '.mp4' -m 300 -d './video/' -d '/home/fred/down loads' -o /tmp_** ..... Check all mp4 files that are smaller 300MB in Fred's down loads directory and ./video. Output will be placed in /tmp.   
 
 Inputs of 'filter' 'source directory' 'output directory' should have single or double quotes otherwise any names with white space will not be processed.
 
@@ -42,7 +42,9 @@ Setting maximum file size is optional, default is 20 GiB.  Ignoring large files 
 
 ### OUTPUTS 
 
-NOTE: If MS Excel is the default application for CVS files and files names containing non-Latin alphabet characters excel will not display those characters correctly. Change the default app for CSV to Notepad/Wordpad and manually import into excel or rename *.csv file to a *.txt and import manually.  
+NOTE: If MS Excel is the default application for CVS files, any files names in the spreadsheet containing non-Latin alphabet characters MS Excel will not display those characters correctly. 
+
+FIX: Change the default app for CSV to Notepad or Wordpad and manually import into excel, alternatively rename *.csv file to a *.txt and import manually into MS Excel.  
   
 __../duplicate_files1_yymmdd-hhmm.csv__  Format – One file per row
 
