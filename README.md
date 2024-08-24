@@ -26,7 +26,7 @@ Setting maximum file size is optional, default is 20 GiB.  Ignoring large files 
 
 **-k or -K** kilobytes (KiB)
 
-**-m or -M** megabytes (Mib)
+**-m or -M** megabytes (MiB)
 
 **-g or -G** gigabytes (GiB)
     
