@@ -65,6 +65,7 @@ CSV Columns
 5. fully pathed file name (file #2)
 6. full path of containing directory (file #2)
 ------------------------------------
+#### Outputs _cont._
 A CSV list of all files processed __../all_files_yymmdd-hhmm.csv__   ...... Format: check_sum,\"\<full path\>\/\<file name\>\"
 
 A CSV list of all unique files  __../unique_files_yymmdd-hhmm.csv__  ... Format: check_sum,\"\<full path\>\/\<file name\>\"
