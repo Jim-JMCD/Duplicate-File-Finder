@@ -1,46 +1,38 @@
-# UNDER CONSTRUCTION - Contents not reliable.
-## NOTES for those that want to use MS Excel or Cal in the moving or deleting of duplicate files: 
-1. The MS Windows CMD terminal window can't work with non-latin charaters, use the MS __Windows Terminal__ app.  
-2. MANDITORY: Any action list (move or delete) created in Excel or Cal must be saved as a *.txt file and converted to Linux format using the dos2linux command to preswerve non-latin characters. 
+## Backup files before before deleting or moving anything. 
+
+The MS Windows CMD terminal window will not work with non-latin charaters, use the MS __Windows Terminal__ app.  
+
+### NOTES for those that want to use MS Excel or Libre Cal to make the task a lot simpler. 
+1. MANDITORY: Any action list (move or delete) created in Excel or Cal on MS Windows must be saved as a *.txt file and converted to Linux format using the dos2linux command. 
    * Run __dos2unix \<file name\>__  
-3. A removal or move list can be created from either report
+2. A removal or move list can be created from either report
    * __duplicate_files1_yymmdd-hhmm.csv__ or
    * __duplicate_files2_yymmdd-hhmm.csv__ 
-4. Test with a small sample.   
+3. Test with a small sample.
+4. Progress can be monitored with the creation of the all_files CSV report, that is created first. Once that has been completed  the creation of the other reports can be monitored in the same way.
+   * Run __tail -f all_files_YYMMDD-hhmm.csv__   
 
-#### Example: Bulk moving of all duplicates 
-This example moves all dulpicate files in _/mnt/c/photos 2022_ to _/mnt/c/Temp/Duplicates_, only one copy is kept.
-From the CSV spreadsheet report create a single column of 
+#### Bulk moving of duplicates 
+Import the __duplicate_files1_yymmdd-hhmm.csv__ into excel or cal 
+1. Delete all the rows belonging to files you don't want to move.
+2. Delete the SHA256 and Directory columns and save as a text file, the __FILE_LIST.txt__
+3. If on MS Windows WSL, MSYS2 or Gitbash you _must_ convert the  __FILE_LIST.txt__ file to linux format using *dos2unix* command. 
+4. Generate the MOVE_LIST where each line is a command to move each file individually.   
+    * Run command where TARGET_DIRECTORY is the directory where file are to moved to, something like _"/tmp/duplicates"_  The directroy path must be in double quotes     
+__awk -v destination="TARGET_DIRECTORY" '{ printf "mv -f \x27%s\x27 \x27%s\x27\n",$0,destination}' < FILE_LIST.txt > MOVE_LIST__
 
+    * The MOVE_LIST will have lines like: _mv -f  '/file/source/directory/path/file_name' '/file/destination/path/'_
+5. To move files run: __bash MOVE_LIST__
 
+#### Bulk deletion of duplicates
+All the same except the command to generate the output is slightly different
 
-__/mnt/c/photos 2022/IMG-202201291815__  
+__awk '{ printf "rm -f  \x27%s\x27\n",$0}' < FILE_LIST.txt > REMOVE_LIST__
 
-To
+The REMOVE_LIST will have lines like: _rm -f '/file/source/directory/path/file_name'_
+    
+To remove files run: __bash REMOVE_LIST__
 
-__mv -f ‘/mnt/c/photos 2022/IMG-202201291815’ ‘/mnt/c/Temp/Duplicates/’__
-
-Alternative to using an editor to modify each line this can be done in bulk using linux commands. First convert the Windows text list to a Linux format list.  _This is mandatory_ 
-
-Run __dos2unix windows_list tmp_list__   This command will preserve UTF-8 characters.
-  
-The following commands will add:
-
-* _mv -f ‘_  to the start of every line
-
-* _‘ ‘/mnt/c/Temp/Duplicates’_  to the end of every line
-
-__awk '{printf "mv -f \x27%s\x27 \x27/mnt/c/Temp/Duplicates/\x27\n",$0}' tmp_list  > move_list__
-
-alternatively
-
-__sed 's/^/mv -f \x27/' tmp_list | sed 's/$/\x27 \x27\\/mnt\\/c\\/Temp\\/Duplicates\\/\x27/' > move_list__
-
-Where 
-* \x27 is used to denote a ' 
-* each / of the path is preceding by a \ 
-
-Once done, check the list.  If all is OK run 
-
-__bash move_list__
+All done      
+   
 
