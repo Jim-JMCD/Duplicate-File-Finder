@@ -55,13 +55,15 @@ CSV Columns
 4. file size in KiB
 ------------------------------------
 
-__../duplicate_files2_yymmdd-hhmm.csv__  Format – Every row is as unique sha256 value with file size and all files of the same shar256 value. If more files match the checksum they are added as columns in <file> <directory> pairs i.e. repeats of columns 3 and 4.  
+__../duplicate_files2_yymmdd-hhmm.csv__  Format – Every row is as unique sha256 value with file size and all files of the same shar256 value. If more files match the checksum they are added as columns in <file> <directory> pairs i.e. repeats of columns 5 and 6.  
 
 CSV Columns
 1. sha256 checksum
 2. file size in KiB 
-3. fully pathed file name 
-4. full path of containing directory
+3. fully pathed file name (file #1)
+4. full path of containing directory (file #1)
+5. fully pathed file name (file #2)
+6. full path of containing directory (file #2)
 ------------------------------------
 A CSV list of all files processed __../all_files_yymmdd-hhmm.csv__   ...... Format: check_sum,\"\<full path\>\/\<file name\>\"
 
