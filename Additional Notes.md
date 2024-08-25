@@ -12,7 +12,7 @@ The MS Windows CMD terminal window will not work with non-latin charaters, use t
 4. Progress can be monitored with the creation of the all_files CSV report, that is created first. Once that has been completed  the creation of the other reports can be monitored in the same way.
    * Run __tail -f all_files_YYMMDD-hhmm.csv__   
 
-#### Bulk moving of duplicates 
+### Bulk moving of duplicates 
 Import the __duplicate_files1_yymmdd-hhmm.csv__ into excel or cal 
 1. Delete all the rows belonging to files you don't want to move.
 2. Delete the SHA256 and Directory columns and save as a text file, the __FILE_LIST.txt__
@@ -24,7 +24,7 @@ __awk -v destination="TARGET_DIRECTORY" '{ printf "mv -f \x27%s\x27 \x27%s\x27\n
     * The MOVE_LIST will have lines like: _mv -f  '/file/source/directory/path/file_name' '/file/destination/path/'_
 5. To move files run: __bash MOVE_LIST__
 
-#### Bulk deletion of duplicates
+### Bulk deletion of duplicates
 All the same except the command to generate the output is slightly different
 
 __awk '{ printf "rm -f  \x27%s\x27\n",$0}' < FILE_LIST.txt > REMOVE_LIST__
@@ -33,6 +33,7 @@ The REMOVE_LIST will have lines like: _rm -f '/file/source/directory/path/file_n
     
 To remove files run: __bash REMOVE_LIST__
 
-All done      
+NOTE: If want to be cautious remove the __-f__ from the commands. You will be prompted for every delete or move. 
+____________________      
    
 
