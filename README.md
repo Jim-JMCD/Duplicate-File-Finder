@@ -44,7 +44,7 @@ Setting maximum file size is optional, default is 20 GiB.  Ignoring large files 
 
 NOTE: If MS Excel is the default application for CVS files, any files names in the spreadsheet containing non-Latin alphabet characters MS Excel will not display those characters correctly. 
 
-FIX: Change the default app for CSV to Notepad or Wordpad and manually import into excel, alternatively rename *.csv file to a *.txt and import manually into MS Excel.  
+FIX: Change the default app for CSV to Notepad or Wordpad and manually import into excel, alternatively rename *.csv file to a *.txt and import manually into MS Excel. Do not attempt to use __Open with__ and select Excel, it always has to be an __Import__.   
   
 __../duplicate_files1_yymmdd-hhmm.csv__  Format – One file per row
 
