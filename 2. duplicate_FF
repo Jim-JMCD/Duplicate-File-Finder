@@ -41,7 +41,7 @@ function Usage(){
   7. First instances of maximum size used, the rest ignored
 
   MORE : https://github.com/Jim-JMCD/Duplicate-File-Finder/blob/main/README.md
-  Author: Jim McDonald , Sydney Aust.
+  Author: Jim McDonald , Australia.
 the_end
 exit 1
 }
